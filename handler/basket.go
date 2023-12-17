@@ -2,15 +2,21 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/labstack/echo"
+	"gorm.io/gorm"
 )
 
-type Handler struct{}
+type Handler struct {
+	db *gorm.DB
+}
+
+func NewHandler(db *gorm.DB) Handler {
+	return Handler{db}
+}
 
 type Basket struct {
 	ID        *int      `json:"id"`
@@ -21,16 +27,6 @@ type Basket struct {
 }
 
 var b = []Basket{}
-
-// Helper function to string Array
-func toString(array []Basket) string {
-	str := "{"
-	for _, i := range b {
-		str += fmt.Sprintf("[%d,%s,%s,%s,%b]", *i.ID, i.CreatedAt, i.UpdatedAt, i.Data, *i.State)
-	}
-	str += "}"
-	return str
-}
 
 // Helper function to find a basket by ID
 func findBasketByID(id int) (*Basket, int) {
@@ -78,6 +74,11 @@ func (h *Handler) CreateBasket(c echo.Context) error {
 
 	createdAt := time.Now()
 	newBasket := createBasket(len(b)+1, createdAt, request.Data, request.State)
+
+	// Save the basket to the database
+	if err := h.db.Create(newBasket).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to save basket"})
+	}
 
 	return c.JSON(http.StatusCreated, newBasket.ID)
 }

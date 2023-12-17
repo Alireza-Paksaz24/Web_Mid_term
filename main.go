@@ -5,12 +5,28 @@ import (
 
 	"github.com/Alireza-Paksaz24/Web_Mid_term/handler"
 	"github.com/labstack/echo"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
+
+var db *gorm.DB
+
+func init() {
+	dsn := "host=localhost user=postgres password=postgres dbname=mid_term port=5432 sslmode=disable TimeZone=Asia/Tehran"
+	var err error
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	// AutoMigrate will create the table if it doesn't exist
+	db.AutoMigrate(&handler.Basket{})
+}
 
 func main() {
 	e := echo.New()
 
-	h := handler.Handler{}
+	h := handler.NewHandler(db)
 
 	// Register the GET function for retrieving all baskets
 	e.GET("/basket", h.GetBaskets)
