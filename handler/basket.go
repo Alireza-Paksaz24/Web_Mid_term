@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -11,19 +13,29 @@ import (
 type Handler struct{}
 
 type Basket struct {
-	id        *int
-	create_at time.Time
-	update_at time.Time
-	data      string
-	state     *bool
+	ID        *int      `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Data      string    `json:"data"`
+	State     *bool     `json:"state"`
 }
 
 var b = []Basket{}
 
+// Helper function to string Array
+func toString(array []Basket) string {
+	str := "{"
+	for _, i := range b {
+		str += fmt.Sprintf("[%d,%s,%s,%s,%b]", *i.ID, i.CreatedAt, i.UpdatedAt, i.Data, *i.State)
+	}
+	str += "}"
+	return str
+}
+
 // Helper function to find a basket by ID
 func findBasketByID(id int) (*Basket, int) {
 	for i, basket := range b {
-		if *basket.id == id {
+		if *basket.ID == id {
 			return &basket, i
 		}
 	}
@@ -49,7 +61,8 @@ func createBasket(id int, createdAt time.Time, data string, state bool) Basket {
 
 // Handler for the /baskets endpoint
 func (h *Handler) GetBaskets(c echo.Context) error {
-	return c.JSON(http.StatusOK, b)
+	jsonData, _ := json.Marshal(b)
+	return c.JSON(http.StatusOK, string(jsonData))
 }
 
 // POST function for Handler to create a new basket
@@ -66,7 +79,7 @@ func (h *Handler) CreateBasket(c echo.Context) error {
 	createdAt := time.Now()
 	newBasket := createBasket(len(b)+1, createdAt, request.Data, request.State)
 
-	return c.JSON(http.StatusCreated, newBasket)
+	return c.JSON(http.StatusCreated, newBasket.ID)
 }
 
 // PATCH function for Handler to update a basket
@@ -90,9 +103,9 @@ func (h *Handler) UpdateBasket(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, map[string]string{"error": "basket not found"})
 	}
 
-	basketToUpdate.data = request.Data
-	basketToUpdate.state = &request.State
-	basketToUpdate.update_at = time.Now()
+	basketToUpdate.Data = request.Data
+	basketToUpdate.State = &request.State
+	basketToUpdate.UpdatedAt = time.Now()
 
 	b[index] = *basketToUpdate
 
