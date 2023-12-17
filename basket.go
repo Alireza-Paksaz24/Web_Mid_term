@@ -98,3 +98,20 @@ func (h *Handler) UpdateBasket(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, basketToUpdate)
 }
+
+// DELETE function for Handler to delete a basket by ID
+func (h *Handler) DeleteBasketByID(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid basket ID"})
+	}
+
+	basketToDelete, index := findBasketByID(id)
+	if basketToDelete == nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "basket not found"})
+	}
+
+	b = append(b[:index], b[index+1:]...)
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "basket deleted"})
+}
