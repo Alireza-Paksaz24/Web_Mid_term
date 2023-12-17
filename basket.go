@@ -40,3 +40,20 @@ func createBasket(id int, createdAt time.Time, data string, state bool) Basket {
 func (h *Handler) GetBaskets(c echo.Context) error {
 	return c.JSON(http.StatusOK, b)
 }
+
+// POST function for Handler to create a new basket
+func (h *Handler) CreateBasket(c echo.Context) error {
+	var request struct {
+		Data  string `json:"data"`
+		State bool   `json:"state"`
+	}
+
+	if err := c.Bind(&request); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request"})
+	}
+
+	createdAt := time.Now()
+	newBasket := createBasket(len(b)+1, createdAt, request.Data, request.State)
+
+	return c.JSON(http.StatusCreated, newBasket)
+}
