@@ -4,9 +4,11 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('./BG.JPG') no-repeat center center fixed; 
+    background: url('./BG.JPG') no-repeat center center fixed;
     background-size: cover;
+    position: relative;
 }
+
 
 /* Style for the box in the Center (main box) */
 .content-box {

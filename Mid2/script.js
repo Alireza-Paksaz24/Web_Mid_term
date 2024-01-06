@@ -1,4 +1,3 @@
-// Wait for the DOM to be fully loaded before executing the script
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize button elements and saved answers
     const submitButton = document.querySelector('button[type="submit"]');
