@@ -15,8 +15,8 @@
                     <input type="text" id="name" name="name">
                 </div>
                 <div class="radio-group">
-                    <input type="radio" id="male" name="gender"/> Male <br/>
-                    <input type="radio" id="female" name="gender"/> Female <br/>
+                    <input type="radio" id="male" name="gender" value="male"/> Male <br/>
+                    <input type="radio" id="female" name="gender" value="female"/> Female <br/>
                 </div>
                 <div class="buttons">
                     <button type="submit">Submit</button>
@@ -28,15 +28,13 @@
                 <div class="prediction"></div>
                 <div class="saved-answer-section">
                     <h2>Saved Answer</h2>
-                    <div class="saved-answer">
-                        <!-- Saved answer content goes here -->
-                        <!-- Place the clear button inside the saved-answer div -->
-                        <button type="button" id="clear">Clear</button>
-                    </div>
+                    <div class="saved-answer"></div>
+                    <button type="button" id="clear">Clear</button>
                 </div>
             </div>
         </div>
     </div>
+  
     <script src="script.js"></script>
 </body>
 </html>
