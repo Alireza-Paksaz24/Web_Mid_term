@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gender Prediction Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background">
+        <div class="content">
+            <div class="form-container">
+                <h2>Mr. or Ms.?</h2>
+                <form id="nameForm">
+                    <div class="input-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" maxlength="255" required pattern="[\u0600-\u06FFA-Za-z ]+">
+                    </div>
+                    <div class="input-group radio-buttons">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Female</label>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit">Submit</button>
+                        <button type="button" id="saveButton">Save</button>
+                    </div>
+                </form>
+            </div>
+            <div class="result-container">
+                <h2>Prediction</h2>
+                <div id="result" class="prediction"></div>
+                <div class="saved-answers">
+                    <h2>Saved Answer</h2>
+                    <div id="savedAnswer" class="saved-answer"></div>
+                    <button type="button" id="clearButton">Clear</button>
+                </div>
+            </div>
+            <div id="error" class="error-message"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
